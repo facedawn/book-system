@@ -1,0 +1,42 @@
+create table book(
+  book_id char(10) primary key,		//条形码
+  book_name varchar(36),		//书名
+  book_auth varchar(36),		//作者
+  book_pub varchar(36),		//出版社
+  ISBN char(15),			//ISBN
+  book_pric numeric(7,2),		//价格
+  book_intro varchar(200),		//简介
+);
+
+create table user(
+  user_id char(10) primary key,		//唯一标识符（用于登录）
+  user_name varchar(20),		//用户名
+  user_password varchar(20),		//密码
+  email_addr varchar(30),		//邮件地址
+  phone_num char(15),		//电话号码
+  is_admin bool			//是否为管理员账号
+);
+
+create table lend(
+  user_id char(10),			//借书人标识符
+  book_id char(10),			//被借书籍条形码
+  lending_time datetime,		//借出时间
+  return_time datetime,		//应当归还时间
+  rest_num int default 5 check(rest_num >= 0),	//剩余续借次数
+  primary key(user_id, book_id),
+  foreign key(user_id) references user(user_id),
+  foreign key(book_id) references book(book_id)
+);
+
+//对逾期罚款的数据条目进行收纳（Trigger）
+create table fine_log(
+  user_id char(10),			//借书人标识符
+  book_id char(10),			//被借书籍条形码
+  fine_time datetime,			//罚款时间
+  fine_amount numeric(7,2),		//罚款金额
+  primary key(user_id, book_id, fine_time),
+  foreign key(user_id) references user(user_id),
+  foreign key(book_id) references book(book_id)
+);
+
+模糊识别：通配符%
