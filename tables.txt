@@ -1,5 +1,8 @@
+//创建数据库的时候选定格式
+create database libtest default character set utf8 collate utf8_general_ci;
+
 create table book(
-  book_id char(10) primary key,		//条形码
+  book_id int primary key,		//条形码
   book_name varchar(36),		//书名
   book_auth varchar(36),		//作者
   book_pub varchar(36),		//出版社
@@ -9,7 +12,7 @@ create table book(
 );
 
 create table user(
-  user_id char(10) primary key,		//唯一标识符（用于登录）
+  user_id int primary key,		//唯一标识符（用于登录）
   user_name varchar(20),		//用户名
   user_password varchar(20),		//密码
   email_addr varchar(30),		//邮件地址
@@ -18,8 +21,8 @@ create table user(
 );
 
 create table lend(
-  user_id char(10),			//借书人标识符
-  book_id char(10),			//被借书籍条形码
+  user_id int,			//借书人标识符
+  book_id int,			//被借书籍条形码
   lending_time datetime,		//借出时间
   return_time datetime,		//应当归还时间
   rest_num int default 5 check(rest_num >= 0),	//剩余续借次数
@@ -30,8 +33,8 @@ create table lend(
 
 //对逾期罚款的数据条目进行收纳（Trigger）
 create table fine_log(
-  user_id char(10),			//借书人标识符
-  book_id char(10),			//被借书籍条形码
+  user_id int,			//借书人标识符
+  book_id int,			//被借书籍条形码
   fine_time datetime,			//罚款时间
   fine_amount numeric(7,2),		//罚款金额
   primary key(user_id, book_id, fine_time),
