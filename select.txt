@@ -1,0 +1,28 @@
+//根据条形码查询图书
+select * from book where book_id = {}
+
+//根据书名查询图书
+select * from book where book_name = {}
+
+//根据作者查询图书
+select * from book where book_auth = {}
+
+//根据ISBN查询图书
+select * from book where ISBN = {}
+
+//根据出版社查询图书
+select * from book where book_pub = {}
+
+//根据书名模糊识别
+select * from book where book_name like '%{}%'
+
+//获取用户信息
+select * from user where user_id = {}
+
+//获取某图书的借阅信息
+select * from lend where book_id = {}
+
+//获取某用户的借阅信息
+select * from lend where user_id = {}
+
+//获取某用户的罚款记录
