@@ -1,3 +1,6 @@
+//创建数据库的时候选定格式
+create database libtest default character set utf8 collate utf8_general_ci;
+
 create table book(
 book_id int primary key,		//条形码
 book_name varchar(36)not null,	//书名
