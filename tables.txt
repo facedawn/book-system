@@ -2,17 +2,18 @@
 create database libtest default character set utf8 collate utf8_general_ci;
 
 create table book(
-book_id int primary key,		//条形码
+book_id int primary key auto_increment,//条形码
 book_name varchar(36)not null,	//书名
 book_auth varchar(36),		//作者
 book_pub varchar(36),		//出版社
 ISBN char(15),			//ISBN
 book_pric numeric(7,2),		//价格
-book_intro varchar(200)		//简介
+book_intro varchar(200),		//简介
+in_library bool default true		//图书是否在馆
 );
  
 create table user(
-user_id int primary key,		//唯一标识符（用于登录）
+user_id int primary key auto_increment, //唯一标识符（用于登录）
 user_name varchar(20) not null,	//用户名
 user_password varchar(20)not null,	//密码
 rest_lend_num int default 20 check(rest_lend_num >= 0),	//剩余借阅数量
@@ -32,15 +33,45 @@ foreign key(user_id) references user(user_id),
 foreign key(book_id) references book(book_id)
 );
 
-//对逾期罚款的数据条目进行收纳（Trigger）
+create table lend_history(
+user_id int,			//借书人标识符
+book_id int,			//被借书籍条形码
+lending_time datetime default now(), 	//借出时间
+return_time datetime,		//归还时间
+primary key(user_id, book_id, lending_time),
+foreign key(user_id) references user(user_id),
+foreign key(book_id) references book(book_id)
+);
+
+//对逾期罚款的数据条目进行收纳
 create table fine_log(
 user_id int,			//借书人标识符
 book_id int,			//被借书籍条形码
-fine_time datetime,			//罚款时间
+fine_time datetime default now(),	//罚款时间
 fine_amount numeric(7,2),		//罚款金额
 primary key(user_id, book_id, fine_time),
 foreign key(user_id) references user(user_id),
 foreign key(book_id) references book(book_id)
 );
 
-模糊识别：通配符%
+delimiter $$
+
+//默认还书时间
+create trigger set_return_time
+before insert on libtest.lend for each row
+begin
+  if new.return_time is null then
+    set new.return_time = date_add(new.lending_time, interval 2 week);
+  end if;
+end;
+$$
+
+//对借阅历史记录收纳
+create trigger set_lend_history
+before delete on libtest.lend for each row
+begin
+  insert into libtest.lend_history
+  values
+  (old.user_id, old.book_id, old.lending_time, now());
+end;
+$$
