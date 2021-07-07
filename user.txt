@@ -1,5 +1,5 @@
-1	ShokuhouMisaki	345678	20	123@qq.com	363738391	1
-2	Index	910JQK	20	456@qq.com	213454535	0
-3	user1	123456	20	hhh@gmail.com	234232434	0
-4	user2	654321	20	isl@stu.xmu.edu.cn	324242342	0
-5	user3	111111	20	sasa@163.com	788976534	0
+123@qq.com	ShokuhouMisaki	345678	20	363738391	1
+456@qq.com	Index	910JQK	20	213454535	0
+hhh@gmail.com	user1	123456	20	234232434	0
+isl@stu.xmu.edu.cn	user2	654321	20	324242342	0
+sasa@163.com	user3	111111	20	788976534	0
