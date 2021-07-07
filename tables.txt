@@ -13,44 +13,43 @@ in_library bool default true		//图书是否在馆
 );
  
 create table user(
-user_id int primary key auto_increment, //唯一标识符（用于登录）
+user_email varchar(30) primary key,	//邮件地址
 user_name varchar(20) not null,	//用户名
 user_password varchar(20)not null,	//密码
 rest_lend_num int default 20 check(rest_lend_num >= 0),	//剩余借阅数量
-email_addr varchar(30),		//邮件地址
 phone_num char(15),		//电话号码
 is_admin bool default false		//是否为管理员账号
 );
 
 create table lend(
-user_id int,			//借书人标识符
+user_email varchar(30),		//借书人标识符
 book_id int,			//被借书籍条形码
 lending_time datetime default now(), 	//借出时间
 return_time datetime,		//应当归还时间
 rest_num int default 5 check(rest_num >= 0),	//剩余续借次数
-primary key(user_id, book_id),
-foreign key(user_id) references user(user_id),
+primary key(user_email, book_id),
+foreign key(user_email) references user(user_email),
 foreign key(book_id) references book(book_id)
 );
 
 create table lend_history(
-user_id int,			//借书人标识符
+user_email varchar(30),		//借书人标识符
 book_id int,			//被借书籍条形码
 lending_time datetime default now(), 	//借出时间
 return_time datetime,		//归还时间
-primary key(user_id, book_id, lending_time),
-foreign key(user_id) references user(user_id),
+primary key(user_email, book_id, lending_time),
+foreign key(user_email) references user(user_email),
 foreign key(book_id) references book(book_id)
 );
 
 //对逾期罚款的数据条目进行收纳
 create table fine_log(
-user_id int,			//借书人标识符
+user_email varchar(30),		//借书人标识符
 book_id int,			//被借书籍条形码
 fine_time datetime default now(),	//罚款时间
 fine_amount numeric(7,2),		//罚款金额
-primary key(user_id, book_id, fine_time),
-foreign key(user_id) references user(user_id),
+primary key(user_email, book_id, fine_time),
+foreign key(user_email) references user(user_email),
 foreign key(book_id) references book(book_id)
 );
 
@@ -72,6 +71,6 @@ before delete on libtest.lend for each row
 begin
   insert into libtest.lend_history
   values
-  (old.user_id, old.book_id, old.lending_time, now());
+  (old.user_email, old.book_id, old.lending_time, now());
 end;
 $$
