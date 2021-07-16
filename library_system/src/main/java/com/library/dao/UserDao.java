@@ -27,6 +27,7 @@ public class UserDao {
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("user_name",username);
         map.put("user_password",password);
+
         return sqlSessionTemplate.selectOne(NAMESPACE+"getMatchAdmin",map);
     }
 }

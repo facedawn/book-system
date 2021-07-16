@@ -5,7 +5,7 @@
     <script src="js/jquery-3.2.1.js"></script>
     <script>
         $(function () {
-            $('#header').load('header.jsp');
+            $('#header').load('userHeader');
         })
     </script>
 </head>

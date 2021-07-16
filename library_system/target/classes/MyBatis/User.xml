@@ -7,10 +7,10 @@
     </update>
     <select resultType="int" id="getMatchCount">
         select count(*) from user
-        where user_name = #{user_name}and user_password = #{user_password}
+        where user_name = #{user_name} and user_password = #{user_password} and is_admin=0;
     </select>
     <select id="getMatchAdmin" resultType="int">
         select count(*) from user
-        where user_name = #{user_name}and user_password = #{user_password} and is_admin=1;
+        where user_name = #{user_name} and user_password = #{user_password} and is_admin=1;
     </select>
 </mapper>

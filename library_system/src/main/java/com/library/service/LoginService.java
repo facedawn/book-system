@@ -17,6 +17,7 @@ public class LoginService {
 
     public boolean hasMatchAdmin(String username,String password)
     {
+        //System.out.printf("%d ",userDao.getMatchAdmin(username,password));
         return userDao.getMatchAdmin(username,password)>0;
     }
 }

@@ -17,8 +17,7 @@ function submit_register() {
     }
     else {
         //提交到数据库，如果冲突返回用户名被占用
-        document.getElementById("notice").innerHTML = "success";
-		setTimeout(reload(), 3000);
+
     }
 }
 
@@ -29,13 +28,11 @@ function to_register() {
     document.getElementById("register").style.display = "none";
     document.getElementById("submitregister").style.display = "block";
 	document.getElementById("hiddenText").value="register";
+	document.getElementById("email").style.display="block"
+
+	document.getElementById("emailLabel").style.display="block"
 }
 
-function login() {
-    //去数据库查，是否对应
-    var username = document.getElementById("username");
-    var password = document.getElementById("password");
-}
 
 
 function disableTextSubmit(e) {

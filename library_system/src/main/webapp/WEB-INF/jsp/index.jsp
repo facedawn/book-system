@@ -17,7 +17,6 @@
 
     <div class="pic middiv" style="height: 10%;">
         <p style="font-size:larger;">图书管理系统登录</p>
-        <a href="link">查看数据库</a>
     </div>
     <div class="outborder">
         <div class="text middiv">
@@ -30,8 +29,12 @@
                 <label>username:</label>
 
                 <input type="text" name="username" id="username" size="30" onkeydown="return disableTextSubmit(event)">
-                <input id="hiddenText" name="mode" value="login" type="text" style="display:none" />
                 <br>
+                <br id="d" style="display:none;">
+                <label id="emailLabel" style="display:none">email:</label>
+                <input type="text" id="email" size="30" style="display:none">
+                <input id="hiddenText" name="mode" value="login" type="text" style="display:none" />
+
                 <label>password:</label>
                 <input type="password" name="password" id="password" size="30" onkeydown="return disableTextSubmit(event)">
                 <br><br>
@@ -49,6 +52,46 @@
 
 
 <script>
+
+$('submitregister').click(function(){
+     var username =$("#username").val();
+     var email=$('#email').val();
+     var password=$("#password").val();
+     if (username==''){
+    	  $("#notice").text("提示:账号不能为空");
+     }
+     else if( email ==''){
+         $("#notice").text("提示:邮箱不能为空");
+     }
+     else if( password ==''){
+         $("#notice").text("提示:密码不能为空");
+     }
+     else
+   	 {
+    	 $.ajax({
+    		 type:"POST",
+    		 url:"api/register",
+    		 data:{
+    			 username:username,
+    			 email:email,
+    			 password:password
+    		 },
+    		 dataType:"json",
+    		 success:function(data){
+    			 if(data.stateCode.trim()==="0")
+    			 {
+    				 $("#notice").text("提示:注册失败，该邮箱已经注册过");
+    			 }
+    			 else if(data.stateCode.trim()==="1")
+    			 {
+    				 $("#notice").text("提示:注册成功");
+    			 }
+    		 }
+    	 })
+   	 }
+     
+     
+})
 
 $("#in").click(function () {
             var username =$("#username").val();
@@ -69,6 +112,7 @@ $("#in").click(function () {
                     },
                     dataType: "json",
                     success: function(data) {
+                    console.log(data.stateCode);
                         if (data.stateCode.trim() === "0") {
                             $("#notice").text("提示:账号或密码错误！");
                         } else if (data.stateCode.trim() === "1") {
