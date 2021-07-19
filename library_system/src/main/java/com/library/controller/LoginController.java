@@ -23,6 +23,24 @@ public class LoginController {
         this.loginService=loginService;
     }
 
+    @RequestMapping(value="/api/register",method = RequestMethod.POST)
+    public @ResponseBody
+    Object register(HttpServletRequest request){
+        String username=request.getParameter("username");
+        String password=request.getParameter("password");
+        String email=request.getParameter("email");
+        boolean success=loginService.registerSuccess(email,username,password);
+        HashMap<String,String>res=new HashMap<>();
+        if(success){
+            res.put("stateCode","1");
+            res.put("msg","register success");
+        }
+        else{
+            res.put("stateCode","0");
+            res.put("msg","register fail");
+        }
+        return res;
+    }
 
     @RequestMapping(value="/api/loginCheck",method= RequestMethod.POST)
     public @ResponseBody
@@ -56,5 +74,6 @@ public class LoginController {
         }
         return res;
     }
+
 
 }

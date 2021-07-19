@@ -40,7 +40,7 @@
                 <br><br>
                 <input id="register" class="button" type="button" value="去注册" onclick='return to_register();';>
                 <input id="in" class="button" type="button" value="登录">
-                <input id="submitregister" class="button" type="submit" value="注册" onclick='return submit_register();'
+                <input id="submitregister" class="button" type="button" value="注册"
                     style="display: none;margin:0 auto">
 
                 <br>
@@ -53,7 +53,7 @@
 
 <script>
 
-$('submitregister').click(function(){
+$('#submitregister').click(function(){
      var username =$("#username").val();
      var email=$('#email').val();
      var password=$("#password").val();
@@ -85,6 +85,7 @@ $('submitregister').click(function(){
     			 else if(data.stateCode.trim()==="1")
     			 {
     				 $("#notice").text("提示:注册成功");
+    				 location.reload();
     			 }
     		 }
     	 })
