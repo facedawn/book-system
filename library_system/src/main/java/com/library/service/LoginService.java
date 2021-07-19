@@ -20,4 +20,9 @@ public class LoginService {
         //System.out.printf("%d ",userDao.getMatchAdmin(username,password));
         return userDao.getMatchAdmin(username,password)>0;
     }
+
+    public boolean registerSuccess(String email,String username,String password)
+    {
+        return userDao.register(email,username,password)>=1;
+    }
 }

@@ -30,4 +30,14 @@ public class UserDao {
 
         return sqlSessionTemplate.selectOne(NAMESPACE+"getMatchAdmin",map);
     }
+
+    public int register(String email,String username,String password)
+    {
+        Map<String,Object> map=new HashMap<>();
+        map.put("user_name",username);
+        map.put("user_password",password);
+        map.put("email",email);
+
+        return sqlSessionTemplate.insert(NAMESPACE+"register",map);
+    }
 }

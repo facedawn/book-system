@@ -4,6 +4,7 @@ public class UserBean {
     private long user_id;
     private String password;
     private String username;
+    private boolean is_Admin;
 
     public long getUserId() {
         return user_id;
@@ -28,5 +29,9 @@ public class UserBean {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public void setIs_Admin(boolean is_Admin){this.is_Admin=is_Admin;}
+
+    public boolean getIs_Admin(){return this.is_Admin;}
 
 }

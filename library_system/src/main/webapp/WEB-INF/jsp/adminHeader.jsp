@@ -4,7 +4,7 @@
 <nav class="all" role="navigation" >
         <div class="top">
             <div class="topIcon" >
-                <a href="admin_main">
+                <a href="admin_main.html">
                     <p class="text-primary" style="font-family: 楷体; font-size: 200%;color :black;">图书馆管理</p>
                 </a>
             </div>
