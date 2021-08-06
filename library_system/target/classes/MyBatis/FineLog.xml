@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.dao.FineLogDao">
+    <select id="getFineLogByTimeAndUser" resultType="com.library.bean.FineLog">
+        select * from fine_log
+        where user_email = #{user_email}
+        and return_time &lt; #{right_side} and return_time > #{left_side};
+    </select>
+    <select id="getUnPayedFineLogByUser" resultType="com.library.bean.FineLog">
+        select * from fine_log
+        where user_email = #{user_email} and pay_situ = false;
+    </select>
+    <select id="getFineLogByUser" resultType="com.library.bean.FineLog">
+        select * from fine_log
+        where user_email = #{user_email};
+    </select>
+    <select id="getFineLogByTime" resultType="com.library.bean.FineLog">
+        select * from fine_log
+        where return_time &lt;= #{right_side} and return_time >= #{left_side};
+    </select>
+    <select id="getUnPayedFineLogByTime" resultType="com.library.bean.FineLog">
+        select * from fine_log
+        where return_time &lt;= #{right_side} and return_time >= #{left_side}
+        and pay_situ = false;
+    </select>
+    <select id="getPayedFineLogByTime" resultType="com.library.bean.FineLog">
+        select * from fine_log
+        where return_time &lt;= #{right_side} and return_time >= #{left_side}
+        and pay_situ = true;
+    </select>
+    <select id="getAllFineLog" resultType="com.library.bean.FineLog">
+        select * from fine_log
+    </select>
+    <select id="getAllUnPayedFineLog" resultType="com.library.bean.FineLog">
+        select * from fine_log
+        where pay_situ = false;
+    </select>
+    <insert id="adminInsertFineLog">
+        insert into fine_log
+        values(#{user_email}, #{book_id}, #{lend_time}, #{return_time});
+    </insert>
+    <update id="payAFine">
+        update fine_log
+        set pay_situ = true
+        where user_email = #{user_email} and book_id = #{book_id}
+        and return_time &lt;= #{right_side} and return_time >= #{left_side};;
+    </update>
+    <update id="adminUpdateFineLog">
+        update fine_log
+        where user_email = #{user_email} and book_id = #{book_id} and lend_time = #{lend_time}
+        set fine_amount = #{fine_amount}, pay_situ = #{pay_situ};
+    </update>
+    <delete id="adminDeleteFineLog">
+        delete from fine_log
+        where user_email = #{user_email} and book_id = #{book_id} and lend_time = #{lend_time}
+    </delete>
+</mapper>

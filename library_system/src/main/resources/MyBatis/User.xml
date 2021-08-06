@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.dao.UserDao">
+    <insert id="register">
+        insert user(user_email, user_name, user_password, phone_num)
+        value (#{user_email}, #{user_name}, #{user_password}, #{phone_num})
+    </insert>
+    <select resultType="int" id="getMatchCount">
+        select count(*) from user
+        where user_name = #{user_name} and user_password = #{user_password} and is_admin=0;
+<!--    这里以后记得改成邮箱    -->
+    </select>
+    <select id="getMatchAdmin" resultType="int">
+        select count(*) from user
+        where user_name = #{user_name} and user_password = #{user_password} and is_admin=1;
+    </select>
+    <select id="getAllUserInfo" resultType="com.library.bean.User">
+        select * from user
+        where is_admin = 0;
+    </select>
+    <select id="getVagueReaderInfo" resultType="com.library.bean.User">
+        select * from user
+        where is_admin=0 and user_email like #{user_email};
+    </select>
+    <select id="getReaderInfo" resultType="com.library.bean.User">
+        select * from user
+        where is_admin=0 and user_email = #{user_email};
+    </select>
+    <select id="getInfo" resultType="com.library.bean.User">
+        select * from user
+        where user_email = #{user_email};
+    </select>
+    <update id="adminUpdate">
+        update user
+        set user_name = #{user_name}, user_password = #{user_password}, phone_num = #{phone_num},
+            rest_lend_num = #{rest_lend_num}, is_admin = #{is_admin}
+        where user_email = #{user_email};
+    </update>
+    <update id="userUpdate">
+        update user
+        set user_name = #{user_name}
+        where user_email = #{user_email};
+    </update>
+    <update id="resetPassword">
+        update user
+        set user_password = #{new_password}
+        where user_email = #{user_email} and user_password = #{old_password};
+    </update>
+    <delete id="adminDeleteReader">
+        delete from user
+        where user_email = #{user_email};
+    </delete>
+    <insert id="adminAddReader">
+        insert user(user_email,user_name,user_password) value (#{user_email},#{user_name},#{user_password});
+    </insert>
+
+</mapper>

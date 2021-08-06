@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.dao.BookDao">
+    <select id="getAllBooks" resultType="com.library.bean.Book">
+        select * from book
+    </select>
+    <select id="getAllBookInfoAndNumByVagueName" resultType="com.library.bean.Book">
+        select distinct book_name, book_auth, book_pub, book_pric, book_intro, e.ISBN, e.cnt as res_num
+        from book, (
+            select ISBN, count(*) cnt
+            from book
+            where book_name like #{book_name} and ISBN in(
+                select distinct ISBN from book
+            )
+            group by ISBN
+        )e
+        where book.ISBN = e.ISBN
+    </select>
+    <select id="getAllISBN" resultType="String">
+        select distinct ISBN from book;
+    </select>
+    <select id="getResBookNumWithSameISBN" resultType="int">
+        select count(*) from (
+            select ISBN from book
+            where in_library = true
+        ) as tb
+        group by ISBN
+        having ISBN = #{ISBN};
+    </select>
+    <select id="getAllBookNumWithSameISBN" resultType="int">
+        select count(*) from book
+        group by ISBN
+        having ISBN = #{ISBN};
+    </select>
+    <select id="getAllBookInfoAndNumByVagueAuth" resultType="com.library.bean.Book">
+        select distinct book_name, book_auth, book_pub, book_pric, book_intro, e.ISBN, e.cnt as res_num
+        from book, (
+        select ISBN, count(*) cnt
+        from book
+        where book_auth like #{book_auth} and ISBN in(
+        select distinct ISBN from book
+        )
+        group by ISBN
+        )e
+        where book.ISBN = e.ISBN
+    </select>
+    <select id="getAllBookInfoAndNumByVaguePub" resultType="com.library.bean.Book">
+        select distinct book_name, book_auth, book_pub, book_pric, book_intro, e.ISBN, e.cnt as res_num
+        from book, (
+        select ISBN, count(*) cnt
+        from book
+        where book_pub like #{book_pub} and ISBN in(
+        select distinct ISBN from book
+        )
+        group by ISBN
+        )e
+        where book.ISBN = e.ISBN
+    </select>
+    <select id="getAllBookInfoAndNumByVagueISBN" resultType="com.library.bean.Book">
+        select distinct book_name, book_auth, book_pub, book_pric, book_intro, e.ISBN, e.cnt as res_num
+        from book, (
+        select ISBN, count(*) cnt
+        from book
+        where ISBN like #{ISBN} and ISBN in(
+        select distinct ISBN from book
+        )
+        group by ISBN
+        )e
+        where book.ISBN = e.ISBN
+    </select>
+    <select id="getBookByBookId" resultType="com.library.bean.Book">
+        select * from book
+        where book_id = #{book_id};
+    </select>
+    <select id="getBookByBookName" resultType="com.library.bean.Book">
+        select * from book
+        where book_name = #{book_name};
+    </select>
+    <select id="getBookByBookAuth" resultType="com.library.bean.Book">
+        select * from book
+        where book_auth = #{book_auth};
+    </select>
+    <select id="getBookByVagueName" resultType="com.library.bean.Book">
+        select * from book
+        where book_name like #{book_name};
+    </select>
+    <select id="getBookByBookPub" resultType="com.library.bean.Book">
+        select * from book
+        where book_pub is #{book_pub};
+    </select>
+    <select id="getBookByInLibrary" resultType="com.library.bean.Book">
+        select * from book
+        where in_library = 1;
+    </select>
+    <select id="getBookByISBN" resultType="com.library.bean.Book">
+        select * from book
+        where ISBN = #{ISBN};
+    </select>
+    <update id="changeBookSettings">
+        update book
+        set book_name = #{book_name}, book_auth = #{book_auth}, book_pub = #{book_pub},
+            ISBN = #{ISBN}, book_pric = #{book_pric}, book_intro = #{book_intro}
+        where book_id = #{book_id};
+    </update>
+    <insert id="addNewBook">
+        insert into book(book_name, book_auth, book_pub, ISBN, book_pric, book_intro)
+        values(#{book_name}, #{book_auth}, #{book_pub}, #{ISBN}, #{book_pric}, #{book_intro});
+    </insert>
+    <delete id="adminDeleteBook">
+        delete from book
+        where book_id = #{book_id};
+    </delete>
+    <select id="bookingBookID" resultType="String">
+        select ISBN from book
+        where book_id in (select book_id from booking
+                          where user_email = #{user_email} and status=1);
+    </select>
+</mapper>

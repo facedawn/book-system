@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.dao.LendDao">
+    <select id="userLendingLog" resultType="com.library.bean.Lend">
+        select * from lend
+        where user_email = #{user_email};
+    </select>
+    <select id="userLendHistory" resultType="com.library.bean.LendHistory">
+        select * from lend_history
+        where user_email = #{user_email};
+    </select>
+    <select id="adminGetAllLendingLog" resultType="com.library.bean.Lend">
+        select * from lend;
+    </select>
+    <select id="adminGetAllLendHistory" resultType="com.library.bean.LendHistory">
+        select * from lend_history;
+    </select>
+    <select id="bookingList" resultType="com.library.bean.Booking">
+        select * from booking
+        order by status desc , booking_time desc;
+    </select>
+    <select id="checkUserHasBooking" resultType="int">
+        select count(*) from booking
+        where user_email = #{user_email} and status = 1;
+    </select>
+
+
+    <select id="findRestNum" resultType="int">
+        select rest_num
+        from lend
+        where book_id=#{book_id} and user_email=#{user_email};
+    </select>
+    <insert id="userLendBook">
+        insert into lend(user_email, book_id)
+        values(#{user_email}, #{book_id});
+    </insert>
+    <insert id="readerBooking">
+        insert into booking(user_email, book_id,status)
+        values(#{user_email}, #{book_id},1);
+    </insert>
+
+
+    <delete id="userReturnBook">
+        delete from lend
+        where user_email = #{user_email} and book_id = #{book_id};
+    </delete>
+
+
+    <update id="userRenew">
+        update lend
+        set rest_num = rest_num - 1, return_time = date_add(return_time, interval 1 week)
+        where user_email = #{user_email} and book_id = #{book_id};
+    </update>
+    <update id="adminUpdateLend">
+        update lend
+        set lending_time = #{lending_time}, return_time = #{return_time}, rest_num = #{rest_num}
+        where user_email = #{user_email} and book_id = #{book_id};
+    </update>
+    <update id="refuseBooking">
+        update booking
+        set dealing_time=now(), status=-1
+        where user_email = #{user_email} and book_id = #{book_id} and status=1;
+    </update>
+    <update id="admitBooking">
+        update booking
+        set dealing_time=now(), status=0
+        where user_email = #{user_email} and book_id = #{book_id} and status=1;
+    </update>
+
+    <delete id="adminRecordDelete">
+        delete from lend_history
+        where user_email = #{user_email} and book_id = #{book_id} and lending_time =#{lending_time};
+    </delete>
+</mapper>
